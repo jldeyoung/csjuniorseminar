@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
+//import 'package:mongo_dart/mongo_dart.dart';
 
 void main() => runApp(MyApp());
+/* //2020-03-09: POSSIBLE INTERFACE WITH MONGODB AND EXAMPLE QUERY--NOT FINAL OR TESTED
+{
+  print("test");
+  Db db = new Db("mongodb+srv://junior-sem-user:pointyhairedboss@junior-sem-test-cluster-ohgei.mongodb.net/test?authSource=admin&replicaSet=Junior-Sem-Test-Cluster-shard-0&readPreference=primary&appname=MongoDB%20Compass%20Community&ssl=true");
+  db.open();
+  var coll = db.collection('players');
+  coll.find(where.eq("isEliminated", true)).toList();
+  print(coll);
+}*/
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -18,7 +28,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.yellow,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
@@ -96,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
-              style: Theme.of(context).textTheme.headline4,
+              style: Theme.of(context).textTheme.headline,
             ),
           ],
         ),
