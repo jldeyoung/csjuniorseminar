@@ -1,0 +1,14 @@
+import 'package:flutter/material.dart';
+// is this necessary^^^^^^ ? ^
+
+// Player class for logic testing
+
+class Player {
+  int playerID;
+  int targetID;
+  String realName;
+  String username;
+  bool isEliminated;
+  bool isTargeted;
+
+}
