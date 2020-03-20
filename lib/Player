@@ -11,4 +11,14 @@ class Player {
   bool isEliminated;
   bool isTargeted;
 
+  Player(pID,tID,rn,un,isE,isT)
+  {
+    this.playerID = pID;
+    this.targetID = tID;
+    this.realname = rn;
+    this.username = un;
+    this.isEliminated = isE;
+    this.isTargeted = isT;
+  }
+
 }
