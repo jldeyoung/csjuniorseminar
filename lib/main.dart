@@ -88,6 +88,7 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
     Text('Index 1: Leaderboard'),
     //  TODO: @David - get mockup
     Text('Index 2: Feed'),
+    //  TODO: Move to Drawer
     Text('Index 3: Settings')
   ];
 
