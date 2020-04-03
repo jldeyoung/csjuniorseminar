@@ -1,5 +1,4 @@
 //import 'package:flutter/material.dart';
-// is this necessary^^^^^^ ? ^
 
 // Player class for logic testing
 
@@ -58,5 +57,18 @@ class Player {
     //shows a prompt to the user with @param question and a text box to answer.
     //@return the answer inputted to text box.
     return "";
+  }
+
+  void getPlayerStatus() {
+
+  }
+  void getPlayerScore() {
+
+  }
+  void getPlayerName() {
+
+  }
+  void startGame() {
+
   }
 }
