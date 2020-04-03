@@ -1,8 +1,6 @@
 //import 'package:flutter/material.dart';
 import 'package:csjuniorseminar/player.dart';
 
-// insert methods here
-
 void setTargets() {
     //get list of players from remote database
 
@@ -16,4 +14,3 @@ void getUsers(){
 
   //update local database/list
 }
-
