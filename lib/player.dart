@@ -41,7 +41,17 @@ class Player {
     return false;
   }
 
-//TODO: Player.updatePlayerScore() and Player.updateTarget().
+  ///Updates the current player's score.
+  ///Version 0: add 10 points, exact scoring mechanics to be determined and implemented.
+  void updatePlayerScore(){
+    score += 10;
+  }
+
+  ///Find the previous target's target(s) and give them to the current player.
+  void updateTarget(){
+    Player oldTarget; //= getFromDB(targetID);
+    targetID = oldTarget.targetID;
+  }
 
   ///member of class Player
   ///Sets getFromDB(this.targetID).isEliminated to true
