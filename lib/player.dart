@@ -9,6 +9,7 @@ class Player {
   String username;
   bool isEliminated;
   bool isTargeted;
+  bool inGame;
   int score;
 
   Player(pID,tID,rn,un,isE,isT)
@@ -20,6 +21,7 @@ class Player {
     this.isEliminated = isE;
     this.isTargeted = isT;
     score = 0;
+    inGame = false;
   }
 
   ///THIS GETS CALLED BY THE GUI BUTTON.
@@ -60,15 +62,28 @@ class Player {
   }
 
   void getPlayerStatus() {
-
+    //what do we want player status to return?
   }
-  void getPlayerScore() {
 
+  void setPlayerScore(sc) {
+    score = sc;
   }
-  void getPlayerName() {
+  int getPlayerScore() {
+    return score;
+  }
 
+  void setPlayerName(name) {
+    username = name;
   }
+  String getPlayerName() {
+    return username;
+  }
+  
   void startGame() {
-
+    inGame = true;
   }
+  void endGame() {
+    inGame = false;
+  }
+
 }
