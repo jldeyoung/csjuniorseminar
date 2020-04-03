@@ -65,14 +65,14 @@ class Player {
     //what do we want player status to return?
   }
 
-  void setPlayerScore(sc) {
+  void setPlayerScore(int sc) {
     score = sc;
   }
   int getPlayerScore() {
     return score;
   }
 
-  void setPlayerName(name) {
+  void setPlayerName(String name) {
     username = name;
   }
   String getPlayerName() {
