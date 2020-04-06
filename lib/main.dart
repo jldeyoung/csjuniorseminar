@@ -293,6 +293,19 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
               return const Divider();
             }
 
+            //  Create settings tile
+            if (index < Controller.getGamesIDs().length + 4) {
+              return ListTile(
+                leading: Controller.settingsBottomTabIcon,
+                title: Text(Controller.settingsBottomTabTitle),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SettingsPage()),
+                  );
+                },
+              );
+            }
             //  Create about tile
             return AboutListTile(
               icon: Icon(Icons.info),
@@ -305,6 +318,20 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
           },
         )
       )
+    );
+  }
+}
+
+class SettingsPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Settings"),
+      ),
+      body: Center(
+        child: Text("Settings Page"),
+      ),
     );
   }
 }
