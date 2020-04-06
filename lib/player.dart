@@ -116,9 +116,7 @@ class Player {
   void setPlayerName(String name) {
     username = name;
   }
-  String getPlayerName() {
-    return username;
-  }
+  String getPlayerName() => username;
   
   void startGame() {
     inGame = true;
