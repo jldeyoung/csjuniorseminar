@@ -61,24 +61,34 @@ class Player {
     return "";
   }
 
-  void getPlayerStatus() {
-    //what do we want player status to return?
+
+  //------------Getters and Setters-------------
+
+  // returns 0 if in game
+  // 1 if eliminated from game
+  // 2 if out of game(game hasn't started yet
+  int getPlayerStatus() {
+    if (inGame) {
+      if (!isEliminated)
+        {
+          return 0;
+        }
+      return 1;
+    }
+    return 2;
   }
 
   void setPlayerScore(sc) {
     score = sc;
   }
-  int getPlayerScore() {
-    return score;
-  }
+  int getPlayerScore() => this.score;
+
 
   void setPlayerName(name) {
     username = name;
   }
-  String getPlayerName() {
-    return username;
-  }
-  
+  String getPlayerHame() => this.username;
+
   void startGame() {
     inGame = true;
   }
