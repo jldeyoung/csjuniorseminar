@@ -36,18 +36,51 @@ class Controller {
     900: Color.fromRGBO(121, 23, 22, 1.0),
   };
 
-  static Map<int, String> _gamelist = {
-    0:"Game 1",
-    1:"Game 2",
-    2:"Game 3",
-    3:"Game 4",
-    4:"Game 5",
-    5:"Game 6"
+  static Map<int, String> _gameNames = {
+    400:"Game 1",
+    1012:"Game 2",
+    2431:"Game 3",
+    3234:"Game 4",
+    44:"Game 5",
+    532:"Game 6"
   };
 
-  static getGameList() {
-    return _gamelist;
+  static List<int> _games = [400, 1012, 2431, 3234, 44, 532];
+
+  static Map<int, String> getGameNames() {
+    return _gameNames;
   }
+
+  static List<int> getGamesIDs() {
+    return _games;
+  }
+
+  static List<LeaderboardItem> _leaderboard = [
+    LeaderboardItem(1, "John Smith", 25),
+    LeaderboardItem(2, "Harry Styles", 20),
+    LeaderboardItem(3, "Bob Dylan", 15)
+  ];
+
+  static List<LeaderboardItem> getLeaderboard() {
+    return _leaderboard;
+  }
+
+  static int _currentGame = 0;
+
+  static int getCurrentGame() {
+    return _currentGame;
+  }
+
+  static setCurrentGame(int val) {
+    _currentGame = val;
+  }
+}
+
+class LeaderboardItem {
+  var position;
+  var name;
+  var points;
+  LeaderboardItem(this.position, this.name, this.points);
 }
 
 
@@ -81,15 +114,25 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
   int _selectedIndex = 0;
 
   //  List of possible widgets
-  static const List<Widget> _widgetOptions = <Widget>[
+  static List<Widget> _widgetOptions = <Widget>[
     // TODO: @Sam - get mockup
     Text('Index 0: Home'),
     //  TODO: @Zach - get mockup
-    Text('Index 1: Leaderboard'),
+    ListView.separated(
+      padding: EdgeInsets.zero,
+      itemCount: Controller.getLeaderboard().length,
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          title: Text("${Controller.getLeaderboard()[index].position}. ${Controller.getLeaderboard()[index].name}"),
+          trailing: Text("${Controller.getLeaderboard()[index].points} points"),
+        );
+      },
+      separatorBuilder: (BuildContext, int index) {
+        return Divider();
+      },
+    ),
     //  TODO: @David - get mockup
     Text('Index 2: Feed'),
-    //  TODO: Move to Drawer
-    Text('Index 3: Settings')
   ];
 
   //  Change the current widget
@@ -98,6 +141,9 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
       _selectedIndex = index;
     });
   }
+
+  final _gameIDTextController = TextEditingController();
+  final _gameNameTextController = TextEditingController();
 
   // Called on setState
   @override
@@ -127,12 +173,6 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
             BottomNavigationBarItem(
               icon: Controller.feedBottomTabIcon,
               title: Text(Controller.feedBottomTabTitle)
-            ),
-
-            //  TODO: Move Settings to Drawer
-            BottomNavigationBarItem(
-              icon: Controller.settingsBottomTabIcon,
-              title: Text(Controller.settingsBottomTabTitle)
             )
           ],
         currentIndex: _selectedIndex,
@@ -144,8 +184,10 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
       drawer: Drawer(
         child: ListView.builder(
           padding: EdgeInsets.zero,
-          itemCount: Controller.getGameList().length + 3,
+          itemCount: Controller.getGamesIDs().length + 4,
           itemBuilder: (BuildContext context, int index) {
+
+            //  Create header
             if (index == 0) {
               return DrawerHeader(
                 decoration: BoxDecoration(
@@ -161,23 +203,104 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
               );
             }
 
-            if (index == Controller.getGameList().length + 1){
+            //  Create game tiles
+            if (index < Controller.getGamesIDs().length + 1) {
+              return ListTile(
+                title: Text(
+                  Controller.getGameNames()[Controller.getGamesIDs()[index - 1]],
+                  style: TextStyle (
+                    fontWeight: Controller.getCurrentGame() == Controller.getGamesIDs()[index - 1] ? FontWeight.bold : FontWeight.normal
+                  ),
+                ),
+                trailing: Text(
+                  "#${Controller.getGamesIDs()[index - 1]}",
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                selected: Controller.getCurrentGame() == Controller.getGamesIDs()[index - 1],
+                onTap: () {
+                  print("Set Current Game: ${Controller.getCurrentGame()}");
+                  setState(() {
+                    Controller.setCurrentGame(Controller.getGamesIDs()[index - 1]);
+                  });
+                  Navigator.pop(context);
+                },
+              );
+            }
+
+            //  Create "Add game" tile
+            if (index < Controller.getGamesIDs().length + 2) {
+              return ListTile(
+                leading: Icon(Icons.add),
+                title: Text("Add game"),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog (
+                        title: Text("Add a new game"),
+                        content: Container(
+                          height: 116,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Column(
+                              children: [
+                                TextField(
+                                  controller: _gameNameTextController,
+                                  decoration: InputDecoration(hintText: "Game Name"),
+                                ),
+                                TextField (
+                                  controller: _gameIDTextController,
+                                  decoration: InputDecoration(hintText: "Game ID"),
+                                )
+                              ]
+                            ),
+                          ),
+                        ),
+
+                        actions: <Widget> [
+                          FlatButton(
+                            child: Text("OK"),
+                            onPressed: () {
+                              print(_gameNameTextController.text);
+                              print(_gameIDTextController.text);
+                              _gameNameTextController.clear();
+                              _gameIDTextController.clear();
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          FlatButton(
+                            child: Text("CANCEL"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              _gameNameTextController.clear();
+                              _gameIDTextController.clear();
+                            },
+                          )
+                        ]
+                      );
+                    }
+                  );
+
+                },
+              );
+            }
+
+            //  Create divider between add and about tiles
+            if (index < Controller.getGamesIDs().length + 3){
               return const Divider();
             }
 
-            if (index == Controller.getGameList().length + 2) {
-              return AboutListTile(
-                icon: Icon(Icons.info),
-                applicationIcon: FlutterLogo(),
-                applicationName: Controller.title,
-                applicationVersion: Controller.versionCode,
-                applicationLegalese: Controller.versionDate,
-                dense: true,
-              );
-            }
-            return ListTile(
-              leading: Icon(Icons.accessibility),
-              title: Text(Controller.getGameList()[index - 1])
+            //  Create about tile
+            return AboutListTile(
+              icon: Icon(Icons.info),
+              applicationIcon: FlutterLogo(),
+              applicationName: Controller.title,
+              applicationVersion: Controller.versionCode,
+              applicationLegalese: Controller.versionDate,
+              dense: true,
             );
           },
         )
