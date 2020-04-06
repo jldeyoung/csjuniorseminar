@@ -41,7 +41,17 @@ class Player {
     return false;
   }
 
-//TODO: Player.updatePlayerScore() and Player.updateTarget().
+  ///Updates the current player's score.
+  ///Version 0: add 10 points, exact scoring mechanics to be determined and implemented.
+  void updatePlayerScore(){
+    score += 10;
+  }
+
+  ///Find the previous target's target(s) and give them to the current player.
+  void updateTarget(){
+    Player oldTarget; //= getFromDB(targetID);
+    targetID = oldTarget.targetID;
+  }
 
   ///member of class Player
   ///Sets getFromDB(this.targetID).isEliminated to true
@@ -78,13 +88,13 @@ class Player {
     return 2;
   }
 
-  void setPlayerScore(sc) {
+  void setPlayerScore(int sc) {
     score = sc;
   }
   int getPlayerScore() => this.score;
 
 
-  void setPlayerName(name) {
+  void setPlayerName(String name) {
     username = name;
   }
   String getPlayerHame() => this.username;
