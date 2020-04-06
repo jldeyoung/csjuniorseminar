@@ -47,6 +47,11 @@ class Controller {
 
   static List<int> _games = [400, 1012, 2431, 3234, 44, 532];
 
+  static addGame(int gameID, String gameName) {
+    _games.add(gameID);
+    _gameNames[gameID] = gameName;
+  }
+
   static Map<int, String> getGameNames() {
     return _gameNames;
   }
@@ -205,28 +210,33 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
 
             //  Create game tiles
             if (index < Controller.getGamesIDs().length + 1) {
-              return ListTile(
-                title: Text(
-                  Controller.getGameNames()[Controller.getGamesIDs()[index - 1]],
-                  style: TextStyle (
-                    fontWeight: Controller.getCurrentGame() == Controller.getGamesIDs()[index - 1] ? FontWeight.bold : FontWeight.normal
+              return Card (
+                elevation: 0,
+                color: Controller.getCurrentGame() == Controller.getGamesIDs()[index - 1] ? Controller.primaryColor.withAlpha(64) : Colors.transparent,
+                child: ListTile(
+                  title: Text(
+                    Controller.getGameNames()[Controller.getGamesIDs()[index - 1]],
+                    style: TextStyle (
+                      fontWeight: Controller.getCurrentGame() == Controller.getGamesIDs()[index - 1] ? FontWeight.bold : FontWeight.normal,
+                      color: Controller.getCurrentGame() == Controller.getGamesIDs()[index - 1] ? Controller.primaryColor : Colors.black87
+                    ),
                   ),
-                ),
-                trailing: Text(
-                  "#${Controller.getGamesIDs()[index - 1]}",
-                  style: TextStyle(
-                    color: Colors.black54,
-                    fontStyle: FontStyle.italic,
+                  trailing: Text(
+                    "#${Controller.getGamesIDs()[index - 1]}",
+                    style: TextStyle(
+                      color: Controller.getCurrentGame() == Controller.getGamesIDs()[index - 1] ? Controller.primaryColor : Colors.black54,
+                      fontStyle: FontStyle.italic,
+                    ),
                   ),
-                ),
-                selected: Controller.getCurrentGame() == Controller.getGamesIDs()[index - 1],
-                onTap: () {
-                  print("Set Current Game: ${Controller.getCurrentGame()}");
-                  setState(() {
-                    Controller.setCurrentGame(Controller.getGamesIDs()[index - 1]);
-                  });
-                  Navigator.pop(context);
-                },
+                  selected: Controller.getCurrentGame() == Controller.getGamesIDs()[index - 1],
+                  onTap: () {
+                    setState(() {
+                      Controller.setCurrentGame(Controller.getGamesIDs()[index - 1]);
+                      print("Set Current Game: ${Controller.getCurrentGame()}");
+                    });
+                    Navigator.pop(context);
+                  },
+                )
               );
             }
 
@@ -262,21 +272,24 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
 
                         actions: <Widget> [
                           FlatButton(
-                            child: Text("OK"),
-                            onPressed: () {
-                              print(_gameNameTextController.text);
-                              print(_gameIDTextController.text);
-                              _gameNameTextController.clear();
-                              _gameIDTextController.clear();
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                          FlatButton(
                             child: Text("CANCEL"),
                             onPressed: () {
                               Navigator.of(context).pop();
                               _gameNameTextController.clear();
                               _gameIDTextController.clear();
+                            },
+                          ),
+                          FlatButton(
+                            child: Text("OK"),
+                            onPressed: () {
+                              setState(() {
+                                var gameName =_gameNameTextController.text;
+                                var gameID = _gameIDTextController.text;
+                                Controller.addGame(int.parse(gameID), gameName);
+                                _gameNameTextController.clear();
+                                _gameIDTextController.clear();
+                                Navigator.of(context).pop();
+                              });
                             },
                           )
                         ]
