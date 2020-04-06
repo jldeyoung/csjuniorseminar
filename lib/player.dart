@@ -1,4 +1,5 @@
 //import 'package:flutter/material.dart';
+//import 'dart:collection';
 import 'dart:math';
 
 // Player class for logic testing
@@ -6,7 +7,9 @@ import 'dart:math';
 class Player {
   static final Set<String> questions = {"What is your favorite color?",
                                         "How many pets do you have?",
-                                        "What's your favorite number?"}; //TODO: generate this list from/in the remote DB
+                                        "What's your favorite number?"}; //TODO: generate this list from the remote DB
+  static final Set<String> answers = {"red", "7", "pi"};//TODO: generate this list from the remote DB
+  Map<String, String> answerMap = Map.fromIterables(questions, answers);
   // ignore: non_constant_identifier_names
   final int NUMBER_OF_QUESTIONS = questions.length;
 
@@ -38,6 +41,11 @@ class Player {
     return questions.elementAt(id);
   }
 
+  String getAnswerFromDB(int id){
+    //TODO: get this implementation from database team
+    return answerMap[id];
+  }
+
   ///Gets the Player at @param id from the remote database.
   ///Version 0 returns a dummy Player.
   Player getPlayerFromDB(int id) {
@@ -54,7 +62,7 @@ class Player {
     Random rnd = new Random();
     int questionID = rnd.nextInt(NUMBER_OF_QUESTIONS); //Random number between [0,NUMBER_OF_QUESTIONS], inclusive.
     String question = getQuestionFromDB(questionID);//Get the question with that random ID from remote DB
-    String answer;// = getFromDB(the answer to question);
+    String answer = getAnswerFromDB(questionID);
     askUser(question);
     if(identical(askUser(question),(answer))){
         eliminateTarget();
