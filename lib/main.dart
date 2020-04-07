@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 //  UI Imports
 import 'package:csjuniorseminar/View/Controller.dart';
 import 'package:csjuniorseminar/View/AssassinHomePage.dart';
+import 'package:csjuniorseminar/View/Theme/style.dart';
 
 void main() => runApp(AssassinApp());
 
@@ -12,9 +13,7 @@ class AssassinApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: Controller.title,
-      theme: ThemeData(
-        primarySwatch: Controller.primarySwatch,
-      ),
+      theme: appTheme(),
       home: AssassinHomePage(title: Controller.homePageTitle),
       debugShowCheckedModeBanner: false,
     );
