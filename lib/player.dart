@@ -48,8 +48,8 @@ class Player {
   ///Updates this.score
   ///Gets this player a new target.
   void eliminateTarget() {
-    updatePlayerScore();
-    updateTarget();
+    //updatePlayerScore();
+    //updateTarget();
     //get this.targetID from remote DB
     //set the target's isEliminated=true;
   }
