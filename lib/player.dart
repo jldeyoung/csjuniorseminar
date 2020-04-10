@@ -100,9 +100,19 @@ class Player {
   void setPlayerStatus(bool status) {
     isEliminated = status;
   }
-  
-  void getPlayerStatus() {
-    //what do we want player status to return?
+
+  /* returns 0 if active
+    1 if eliminated
+    2 if game hasn't started yet
+   */
+  int getPlayerStatus() {
+  if (inGame) {
+      if (!isEliminated) {
+        return 0;
+     }
+      return 1;
+    }
+    return 2;
   }
 
   void setPlayerScore(int sc) {
