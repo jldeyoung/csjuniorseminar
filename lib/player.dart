@@ -101,10 +101,9 @@ class Player {
     isEliminated = status;
   }
 
-  /* returns 0 if active
-    1 if eliminated
-    2 if game hasn't started yet
-   */
+  /// returns 0 if active
+  /// 1 if eliminated
+  /// 2 if game hasn't started yet
   int getPlayerStatus() {
   if (inGame) {
       if (!isEliminated) {
