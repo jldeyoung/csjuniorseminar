@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 
 // UI Imports
 import 'package:csjuniorseminar/View/Controller.dart';
-
+import 'package:csjuniorseminar/View/HomePage.dart';
+import 'package:csjuniorseminar/View/LeaderboardPage.dart';
+import 'package:csjuniorseminar/View/FeedPage.dart';
+import 'package:csjuniorseminar/View/NavigationBar.dart';
 
 class AssassinHomePage extends StatefulWidget {
   //  Constructor
@@ -14,6 +17,8 @@ class AssassinHomePage extends StatefulWidget {
   _AssassinHomePageState createState() => _AssassinHomePageState();
 }
 
+
+
 class _AssassinHomePageState extends State<AssassinHomePage> {
   //  Current selected widget
   int _selectedIndex = 0;
@@ -21,23 +26,10 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
   //  List of possible widgets
   static List<Widget> _widgetOptions = <Widget>[
     // TODO: @Sam - get mockup
-    Text('Index 0: Home'),
-    //  TODO: @Zach - get mockup
-    ListView.separated(
-      padding: EdgeInsets.zero,
-      itemCount: Controller.getLeaderboard().length,
-      itemBuilder: (BuildContext context, int index) {
-        return ListTile(
-          title: Text("${Controller.getLeaderboard()[index].position}. ${Controller.getLeaderboard()[index].name}"),
-          trailing: Text("${Controller.getLeaderboard()[index].points} points"),
-        );
-      },
-      separatorBuilder: (BuildContext, int index) {
-        return Divider();
-      },
-    ),
+    HomePage(),
+    LeaderboardPage(),
     //  TODO: @David - get mockup
-    Text('Index 2: Feed'),
+    FeedPage(),
   ];
 
   //  Change the current widget
@@ -60,37 +52,13 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
         body: Center(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem> [
-            // Home
-            BottomNavigationBarItem(
-              icon: Controller.homeBottomTabIcon,
-              title: Text(Controller.homeBottomTabTitle),
-            ),
-
-            //  Leaderboard
-            BottomNavigationBarItem(
-                icon: Controller.leaderboardBottomTabIcon,
-                title: Text(Controller.leaderboardBottomTabTitle)
-            ),
-
-            //  Feed
-            BottomNavigationBarItem(
-                icon: Controller.feedBottomTabIcon,
-                title: Text(Controller.feedBottomTabTitle)
-            )
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.amber[800],
-          unselectedItemColor: Colors.black54,
-          showUnselectedLabels: true,
-          onTap: _onItemTapped,
-        ),
         drawer: Drawer(
             child: ListView.builder(
               padding: EdgeInsets.zero,
-              itemCount: Controller.getGamesIDs().length + 4,
+              itemCount: 8,
               itemBuilder: (BuildContext context, int index) {
+                //  Variables
+                var currentGame = Controller.getCurrentGame();
 
                 //  Create header
                 if (index == 0) {
@@ -108,106 +76,149 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
                   );
                 }
 
-                //  Create game tiles
-                if (index < Controller.getGamesIDs().length + 1) {
-                  return Card (
-                      elevation: 0,
-                      color: Controller.getCurrentGame() == Controller.getGamesIDs()[index - 1] ? Controller.primaryColor.withAlpha(64) : Colors.transparent,
-                      child: ListTile(
-                        title: Text(
-                          Controller.getGameNames()[Controller.getGamesIDs()[index - 1]],
-                          style: TextStyle (
-                              fontWeight: Controller.getCurrentGame() == Controller.getGamesIDs()[index - 1] ? FontWeight.bold : FontWeight.normal,
-                              color: Controller.getCurrentGame() == Controller.getGamesIDs()[index - 1] ? Controller.primaryColor : Colors.black87
-                          ),
-                        ),
-                        trailing: Text(
-                          "#${Controller.getGamesIDs()[index - 1]}",
-                          style: TextStyle(
-                            color: Controller.getCurrentGame() == Controller.getGamesIDs()[index - 1] ? Controller.primaryColor : Colors.black54,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                        selected: Controller.getCurrentGame() == Controller.getGamesIDs()[index - 1],
-                        onTap: () {
-                          setState(() {
-                            Controller.setCurrentGame(Controller.getGamesIDs()[index - 1]);
-                            print("Set Current Game: ${Controller.getCurrentGame()}");
-                          });
-                          Navigator.pop(context);
-                        },
-                      )
-                  );
-                }
+                var dropdownValue = Controller.getCurrentGame();
+                var dropdownGameIDs = Controller.getGamesIDs();
+                var dropdownGameNames = Controller.getGameNames();
 
-                //  Create "Add game" tile
-                if (index < Controller.getGamesIDs().length + 2) {
+                if (index == 1) {
                   return ListTile(
-                    leading: Icon(Icons.add),
-                    title: Text("Add game"),
-                    onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog (
-                                title: Text("Add a new game"),
-                                content: Container(
-                                  height: 116,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Column(
-                                        children: [
-                                          TextField(
-                                            controller: _gameNameTextController,
-                                            decoration: InputDecoration(hintText: "Game Name"),
-                                          ),
-                                          TextField (
-                                            controller: _gameIDTextController,
-                                            decoration: InputDecoration(hintText: "Game ID"),
-                                          )
-                                        ]
+                    title: DropdownButton<int>(
+                      value: dropdownValue,
+                      isExpanded: true,
+
+                      onChanged: (int newGameID) async {
+                        if (newGameID == 0) {
+                          await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog (
+                                    title: Text("Add a new game"),
+                                    content: Container(
+                                      height: 116,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(10),
+                                        child: Column(
+                                            children: [
+                                              TextField(
+                                                controller: _gameNameTextController,
+                                                decoration: InputDecoration(hintText: "Game Name"),
+                                              ),
+                                              TextField (
+                                                controller: _gameIDTextController,
+                                                decoration: InputDecoration(hintText: "Game ID"),
+                                              )
+                                            ]
+                                        ),
+                                      ),
                                     ),
-                                  ),
-                                ),
 
-                                actions: <Widget> [
-                                  FlatButton(
-                                    child: Text("CANCEL"),
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      _gameNameTextController.clear();
-                                      _gameIDTextController.clear();
-                                    },
-                                  ),
-                                  FlatButton(
-                                    child: Text("OK"),
-                                    onPressed: () {
-                                      setState(() {
-                                        var gameName =_gameNameTextController.text;
-                                        var gameID = _gameIDTextController.text;
-                                        Controller.addGame(int.parse(gameID), gameName);
-                                        _gameNameTextController.clear();
-                                        _gameIDTextController.clear();
-                                        Navigator.of(context).pop();
-                                      });
-                                    },
-                                  )
-                                ]
-                            );
+                                    actions: <Widget> [
+                                      FlatButton(
+                                        child: Text("CANCEL"),
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          _gameNameTextController.clear();
+                                          _gameIDTextController.clear();
+                                        },
+                                      ),
+                                      FlatButton(
+                                        child: Text("OK"),
+                                        onPressed: () {
+                                          setState(() {
+                                            var gameName =_gameNameTextController.text;
+                                            newGameID = int.parse(_gameIDTextController.text);
+                                            Controller.addGame(newGameID, gameName);
+                                            _gameNameTextController.clear();
+                                            _gameIDTextController.clear();
+                                            Navigator.of(context).pop();
+                                          });
+                                        },
+                                      )
+                                    ]
+                                );
+                              }
+                          );
+                        }
+
+                        //  Update button with that option
+                        setState(() {
+                          if (newGameID != 0) {
+                            Controller.setCurrentGame(newGameID);
+                            Navigator.pop(context);
                           }
-                      );
+                        });
+                      },
+                      items: dropdownGameIDs.map<DropdownMenuItem<int>>((int gameID) {
+                        //  Add game button
+                        if(gameID == 0) {
+                          return DropdownMenuItem<int>(
+                              value: gameID,
+                              child: Container(
+                                  padding: EdgeInsets.all(0),
+                                  child: Row(
+                                      children: <Widget>[
+                                        Icon(Icons.add),
+                                        Text("Add game")
+                                      ]
+                                  )
+                              )
+                          );
+                        }
 
-                    },
+                        return DropdownMenuItem<int>(
+                          value: gameID,
+                          child: Container(
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(dropdownGameNames[gameID]),
+                                ),
+                                Expanded (
+                                  child: Text(
+                                    "#$gameID",
+                                    textAlign: TextAlign.right,
+                                  ),
+                                )
+                              ]
+                            ),
+                          )
+                        );
+                      }).toList(),
+                    )
+                  );
+
+                }
+
+                //  Home Title
+                if (index == 2) {
+                  return ListTile (
+                    leading: Controller.homeBottomTabIcon,
+                    title: Text(Controller.homeBottomTabTitle),
                   );
                 }
 
-                //  Create divider between add and about tiles
-                if (index < Controller.getGamesIDs().length + 3){
+                //  Leaderboard Tile
+                if (index == 3) {
+                  return ListTile (
+                    leading: Controller.leaderboardBottomTabIcon,
+                    title: Text(Controller.leaderboardBottomTabTitle),
+                  );
+                }
+
+                //  Feed Tile
+                if (index == 4) {
+                  return ListTile (
+                    leading: Controller.feedBottomTabIcon,
+                    title: Text(Controller.feedBottomTabTitle),
+                  );
+                }
+                //  Create divider between screens and settings/about
+                if (index == 5){
                   return const Divider();
                 }
 
                 //  Create settings tile
-                if (index < Controller.getGamesIDs().length + 4) {
+                if (index == 6) {
                   return ListTile(
                     leading: Controller.settingsBottomTabIcon,
                     title: Text(Controller.settingsBottomTabTitle),
@@ -219,6 +230,7 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
                     },
                   );
                 }
+
                 //  Create about tile
                 return AboutListTile(
                   icon: Icon(Icons.info),

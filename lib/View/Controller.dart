@@ -35,18 +35,14 @@ class Controller {
   };
 
   static Map<int, String> _gameNames = {
-    400:"Game 1",
+    1:"Game 1",
     1012:"Game 2",
-    2431:"Game 3",
-    3234:"Game 4",
-    44:"Game 5",
-    532:"Game 6"
   };
 
-  static List<int> _games = [400, 1012, 2431, 3234, 44, 532];
+  static List<int> _games = [1, 1012, 0];
 
   static addGame(int gameID, String gameName) {
-    _games.add(gameID);
+    _games.insert(_games.length - 1, gameID);
     _gameNames[gameID] = gameName;
   }
 
@@ -68,7 +64,7 @@ class Controller {
     return _leaderboard;
   }
 
-  static int _currentGame = 0;
+  static int _currentGame = 1;
 
   static int getCurrentGame() {
     return _currentGame;
