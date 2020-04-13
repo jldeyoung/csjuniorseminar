@@ -5,13 +5,13 @@ import 'dart:math';
 // Player class for logic testing
 
 class Player {
-  static final Set<String> questions = {"What is your favorite color?",
+  static final Set<String> _questions = {"What is your favorite color?",
                                         "How many pets do you have?",
                                         "What's your favorite number?"}; //TODO: generate this list from the remote DB
-  static final Set<String> answers = {"red", "7", "pi"};//TODO: generate this list from the remote DB
-  Map<String, String> answerMap = Map.fromIterables(questions, answers);
+  static final Set<String> _answers = {"red", "7", "pi"};//TODO: generate this list from the remote DB
+  Map<String, String> _answerMap = Map.fromIterables(_questions, _answers);
   // ignore: non_constant_identifier_names
-  final int NUMBER_OF_QUESTIONS = questions.length;
+  final int NUMBER_OF_QUESTIONS = _questions.length;
 
   int playerID;
   int targetID;
@@ -37,13 +37,11 @@ class Player {
   ///Gets the object with whatever @param id from the remote database.
   ///Version 0 returns from the list literal above.
   String getQuestionFromDB(int id){
-    //TODO: get this implementation from database team
-    return questions.elementAt(id);
+    return _questions.elementAt(id);
   }
 
   String getAnswerFromDB(int id){
-    //TODO: get this implementation from database team
-    return answerMap[id];
+    return _answerMap[id];
   }
 
   ///Gets the Player at @param id from the remote database.
@@ -103,10 +101,9 @@ class Player {
     isEliminated = status;
   }
 
-  /* returns 0 if active
-    1 if eliminated
-    2 if game hasn't started yet
-   */
+  /// returns 0 if active
+  /// 1 if eliminated
+  /// 2 if game hasn't started yet
   int getPlayerStatus() {
   if (inGame) {
       if (!isEliminated) {

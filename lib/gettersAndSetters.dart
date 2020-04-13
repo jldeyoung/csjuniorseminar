@@ -10,3 +10,4 @@ const cardinalRed = Color(0xFF791716); ///Inefficient but not sure which one is 
 Color CardinalRedColor(){
   return cardinalRed; //Color(0xFF791716);
 }
+
