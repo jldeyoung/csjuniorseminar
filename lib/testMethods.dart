@@ -14,3 +14,11 @@ void getUsers(){
 
   //update local database/list
 }
+
+void startGame() {
+  // update database to show game in progress
+  setTargets();
+
+  //get local player info from database
+  Player localPlayer = new Player(/*localplayerinfo*/);
+}
