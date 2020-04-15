@@ -5,7 +5,6 @@ import 'package:csjuniorseminar/View/Controller.dart';
 import 'package:csjuniorseminar/View/HomePage.dart';
 import 'package:csjuniorseminar/View/LeaderboardPage.dart';
 import 'package:csjuniorseminar/View/FeedPage.dart';
-import 'package:csjuniorseminar/View/NavigationBar.dart';
 
 class AssassinHomePage extends StatefulWidget {
   //  Constructor
@@ -31,13 +30,6 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
     //  TODO: @David - get mockup
     FeedPage(),
   ];
-
-  //  Change the current widget
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
 
   final _gameIDTextController = TextEditingController();
   final _gameNameTextController = TextEditingController();
@@ -191,25 +183,79 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
 
                 //  Home Title
                 if (index == 2) {
-                  return ListTile (
-                    leading: Controller.homeBottomTabIcon,
-                    title: Text(Controller.homeBottomTabTitle),
+                  return Card(
+                    elevation: 0,
+                    color: _selectedIndex == index - 2 ? Controller.primaryColor.withAlpha(200) : Colors.transparent,
+                    child: ListTile(
+                      leading: Icon(
+                        Controller.homeBottomTabIcon.icon,
+                        color: _selectedIndex == index - 2 ? Colors.white : Colors.black54
+                      ),
+                      title: Text(
+                        Controller.homeBottomTabTitle,
+                        style: TextStyle(
+                          color: _selectedIndex == index - 2 ? Colors.white : Colors.black87
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _selectedIndex = index - 2;
+                          Navigator.pop(context);
+                        });
+                      },
+                    ),
                   );
                 }
 
                 //  Leaderboard Tile
                 if (index == 3) {
-                  return ListTile (
-                    leading: Controller.leaderboardBottomTabIcon,
-                    title: Text(Controller.leaderboardBottomTabTitle),
+                  return Card(
+                    elevation: 0,
+                    color: _selectedIndex == index - 2 ? Controller.primaryColor.withAlpha(200) : Colors.transparent,
+                    child: ListTile(
+                      leading: Icon(
+                          Controller.leaderboardBottomTabIcon.icon,
+                          color: _selectedIndex == index - 2 ? Colors.white : Colors.black54
+                      ),
+                      title: Text(
+                        Controller.leaderboardBottomTabTitle,
+                        style: TextStyle(
+                            color: _selectedIndex == index - 2 ? Colors.white : Colors.black87
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _selectedIndex = index - 2;
+                          Navigator.pop(context);
+                        });
+                      },
+                    ),
                   );
                 }
 
                 //  Feed Tile
                 if (index == 4) {
-                  return ListTile (
-                    leading: Controller.feedBottomTabIcon,
-                    title: Text(Controller.feedBottomTabTitle),
+                  return Card(
+                    elevation: 0,
+                    color: _selectedIndex == index - 2 ? Controller.primaryColor.withAlpha(200) : Colors.transparent,
+                    child: ListTile(
+                      leading: Icon(
+                          Controller.feedBottomTabIcon.icon,
+                          color: _selectedIndex == index - 2 ? Colors.white : Colors.black54
+                      ),
+                      title: Text(
+                        Controller.feedBottomTabTitle,
+                        style: TextStyle(
+                            color: _selectedIndex == index - 2 ? Colors.white : Colors.black87
+                        ),
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _selectedIndex = index - 2;
+                          Navigator.pop(context);
+                        });
+                      },
+                    ),
                   );
                 }
                 //  Create divider between screens and settings/about
