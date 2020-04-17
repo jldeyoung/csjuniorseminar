@@ -30,8 +30,13 @@ MaterialColor primarySwatch() => cardinalRedSwatch;
 //String userDisplayName() => username; //player method??
 Map<int,String> gameTitles() => _gameNames;//where does this belong
 List<int> gameIDs() => _games;
-
 int getCurrentGameID() => _currentGame;
+
+///Setters
 setCurrentGameID(int a){
   _currentGame = a;
+}
+addGame(){
+  _games.add(_games.length);
+  _gameNames[_gameNames.length] = "Game" + "$_gameNames.length" + " Title";
 }
