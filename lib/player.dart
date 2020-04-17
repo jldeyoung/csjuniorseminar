@@ -40,6 +40,8 @@ class Player {
     return _questions.elementAt(id);
   }
 
+  ///Gets the answer to a question with @param id from remote DB.
+  ///Version 0 returns from the map literal above.
   String getAnswerFromDB(int id){
     return _answerMap[id];
   }

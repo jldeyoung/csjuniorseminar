@@ -17,7 +17,7 @@ void getUsers(){
 }
 
 void startGame() {
-  // update database to show game in progress
+  //gameOver = false;// update database to show game in progress
   setTargets();
 
   //get local player info from database
