@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "127011820415",
+    "firebase_url": "https://junior-sem.firebaseio.com",
+    "project_id": "junior-sem",
+    "storage_bucket": "junior-sem.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127011820415:android:0c5bd9f3e27e756ed8c04a",
+        "android_client_info": {
+          "package_name": "com.juniorseminar.willamette.csjuniorseminar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "127011820415-j3nsce0krrhqh8sjnqv0lubo7oflsn4g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbY83-jbKCJiaiK0d5QtQ51a2YZIBDvc8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "127011820415-j3nsce0krrhqh8sjnqv0lubo7oflsn4g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "127011820415-7hc0v09snulkltdr4pjrua2maje5b67b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.juniorseminar.willamette.csjuniorseminarNew",
+                "app_store_id": "236942056"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
