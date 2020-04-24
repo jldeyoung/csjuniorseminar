@@ -69,12 +69,63 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
                 // Game selection tile
                 if (index == 1) {
                   //  If there are no games, create an add games tile
-                  if (Controller.getGamesIDs().length < 1) {
+                  if (Controller.getGamesIDs().length < 2) {
                     return ListTile(
                       leading: Icon(Icons.add),
                       title: Text("Add game"),
-                      onTap: () {
-                        print("tapped");
+                      onTap: () async {
+                        var newGameID = 0;
+                        await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                          return AlertDialog (
+                              title: Text("Add a new game"),
+                              content: Container(
+                                height: 116,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Column(
+                                      children: [
+                                        TextField(
+                                          controller: _gameNameTextController,
+                                          decoration: InputDecoration(hintText: "Game Name"),
+                                        ),
+                                        TextField (
+                                          controller: _gameIDTextController,
+                                          decoration: InputDecoration(hintText: "Game ID"),
+                                        )
+                                      ]
+                                  ),
+                                ),
+                              ),
+
+                              actions: <Widget> [
+                                FlatButton(
+                                  child: Text("CANCEL"),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    _gameNameTextController.clear();
+                                    _gameIDTextController.clear();
+                                  },
+                                ),
+                                FlatButton(
+                                  child: Text("OK"),
+                                  onPressed: () {
+                                    setState(() {
+                                      var gameName =_gameNameTextController.text;
+                                      newGameID = int.parse(_gameIDTextController.text);
+                                      Controller.addGame(newGameID, gameName);
+                                      _gameNameTextController.clear();
+                                      _gameIDTextController.clear();
+                                      Controller.setCurrentGame(newGameID);
+                                      Navigator.of(context).pop();
+                                    });
+                                  },
+                                )
+                              ]
+                          );
+                        }
+                        );
                       },
                     );
                   }
@@ -219,6 +270,12 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
                                   setState(() {
                                     Navigator.pop(context);
                                     Controller.removeGame(gameID);
+                                    for (var i = 0; i < Controller.getGamesIDs().length; i++) {
+                                      var val = Controller.getGamesIDs()[i];
+                                      if (val != 0) {
+                                        Controller.setCurrentGame(val);
+                                      }
+                                    }
                                   });
                                 }
                               },

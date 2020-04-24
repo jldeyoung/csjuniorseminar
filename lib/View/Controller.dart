@@ -38,7 +38,7 @@ class Controller {
     1:"game"
   };
 
-  static List<int> _games = [1];
+  static List<int> _games = [1, 0];
 
   static addGame(int gameID, String gameName) {
     _games.insert(_games.length - 1, gameID);
