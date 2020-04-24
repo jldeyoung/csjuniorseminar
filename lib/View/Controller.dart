@@ -18,7 +18,7 @@ class Controller {
   static const feedBottomTabIcon = Icon(Icons.format_align_justify);
   static const settingsBottomTabTitle = 'Settings';
   static const settingsBottomTabIcon = Icon(Icons.settings);
-  static var username = "John Smith";
+  static var username = "John";
 
   static Map<int, Color> _cardinalColorMap =
   {
@@ -35,16 +35,16 @@ class Controller {
   };
 
   static Map<int, String> _gameNames = {
-    1:"Game 1",
-    1012:"Game 2",
+    1:"game"
   };
 
-  static List<int> _games = [1, 1012, 0];
+  static List<int> _games = [1];
 
   static addGame(int gameID, String gameName) {
     _games.insert(_games.length - 1, gameID);
     _gameNames[gameID] = gameName;
   }
+
 
   static Map<int, String> getGameNames() {
     return _gameNames;
@@ -73,6 +73,17 @@ class Controller {
   static setCurrentGame(int val) {
     _currentGame = val;
   }
+
+  // TODO: Request new methods:
+  static editGameName(int gameID, String gameName) {
+    _gameNames[gameID] = gameName;
+  }
+
+  static removeGame(int gameID) {
+    _games.remove(gameID);
+    _gameNames.remove(gameID);
+  }
+
 }
 
 class LeaderboardItem {

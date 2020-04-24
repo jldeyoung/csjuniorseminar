@@ -47,11 +47,9 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
         drawer: Drawer(
             child: ListView.builder(
               padding: EdgeInsets.zero,
-              itemCount: 8,
+              itemCount: 9,
               itemBuilder: (BuildContext context, int index) {
-                //  Variables
-                var currentGame = Controller.getCurrentGame();
-
+                const headerNum = 3;
                 //  Create header
                 if (index == 0) {
                   return DrawerHeader(
@@ -68,16 +66,24 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
                   );
                 }
 
-                var dropdownValue = Controller.getCurrentGame();
-                var dropdownGameIDs = Controller.getGamesIDs();
-                var dropdownGameNames = Controller.getGameNames();
-
+                // Game selection tile
                 if (index == 1) {
+                  //  If there are no games, create an add games tile
+                  if (Controller.getGamesIDs().length < 1) {
+                    return ListTile(
+                      leading: Icon(Icons.add),
+                      title: Text("Add game"),
+                      onTap: () {
+                        print("tapped");
+                      },
+                    );
+                  }
+
+                  //  If there are 1 or more games, create a dropdown
                   return ListTile(
                     title: DropdownButton<int>(
-                      value: dropdownValue,
+                      value: Controller.getCurrentGame(),
                       isExpanded: true,
-
                       onChanged: (int newGameID) async {
                         if (newGameID == 0) {
                           await showDialog(
@@ -140,37 +146,91 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
                           }
                         });
                       },
-                      items: dropdownGameIDs.map<DropdownMenuItem<int>>((int gameID) {
+                      selectedItemBuilder: (BuildContext context) {
+                        return Controller.getGamesIDs().map<Widget>((int gameID) {
+                          return Container(
+                            //color: Colors.red,
+                            alignment: Alignment.centerLeft,
+                            child: Text("${Controller.getGameNames()[gameID]}"),
+                          );
+                        }).toList();
+                      },
+                      items: Controller.getGamesIDs().map<DropdownMenuItem<int>>((int gameID) {
                         //  Add game button
                         if(gameID == 0) {
                           return DropdownMenuItem<int>(
-                              value: gameID,
-                              child: Container(
-                                  padding: EdgeInsets.all(0),
-                                  child: Row(
-                                      children: <Widget>[
-                                        Icon(Icons.add),
-                                        Text("Add game")
-                                      ]
-                                  )
-                              )
+                            value: gameID,
+                            child: ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: Icon(Icons.add),
+                              title: Text("Add game"),
+                            )
                           );
                         }
 
                         return DropdownMenuItem<int>(
                           value: gameID,
-                          child: Container(
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(dropdownGameNames[gameID]),
+                          child: ListTile(
+                            contentPadding: EdgeInsets.zero,
+                            title: Text(Controller.getGameNames()[gameID]),
+                            subtitle: Text("#$gameID"),
+                            trailing: PopupMenuButton(
+                              icon: Icon(Icons.more_vert),
+                              onSelected: (option) async {
+                                if (option == 0) {
+                                  Navigator.pop(context);
+                                  await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog (
+                                            title: Text("Edit game title"),
+                                            content: Padding(
+                                              padding: const EdgeInsets.all(10),
+                                              child: TextField(
+                                                controller: _gameNameTextController,
+                                                decoration: InputDecoration(hintText: "Game Name"),
+                                              ),
+                                            ),
+                                            actions: <Widget> [
+                                              FlatButton(
+                                                child: Text("CANCEL"),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                  _gameNameTextController.clear();
+                                                },
+                                              ),
+                                              FlatButton(
+                                                child: Text("OK"),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    var gameName =_gameNameTextController.text;
+                                                    Controller.editGameName(gameID, gameName);
+                                                    _gameNameTextController.clear();
+                                                    Navigator.pop(context);
+                                                    print("updated list");
+                                                  });
+                                                },
+                                              )
+                                            ]
+                                        );
+                                      }
+                                  );
+                                } else if (option == 1) {
+                                  setState(() {
+                                    Navigator.pop(context);
+                                    Controller.removeGame(gameID);
+                                  });
+                                }
+                              },
+                              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                                const PopupMenuItem(
+                                  value: 0,
+                                  child: Text('Edit')
                                 ),
-                                Expanded (
-                                  child: Text(
-                                    "#$gameID",
-                                    textAlign: TextAlign.right,
-                                  ),
-                                )
+                                const PopupMenuItem(
+                                  value: 1,
+                                  child: Text('Remove'),
+                                ),
                               ]
                             ),
                           )
@@ -178,28 +238,32 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
                       }).toList(),
                     )
                   );
+                }
 
+                // Divider
+                if (index == 2) {
+                  return const Divider();
                 }
 
                 //  Home Title
-                if (index == 2) {
+                if (index == headerNum) {
                   return Card(
                     elevation: 0,
-                    color: _selectedIndex == index - 2 ? Controller.primaryColor.withAlpha(200) : Colors.transparent,
+                    color: _selectedIndex == index - headerNum ? Controller.primaryColor.withAlpha(200) : Colors.transparent,
                     child: ListTile(
                       leading: Icon(
                         Controller.homeBottomTabIcon.icon,
-                        color: _selectedIndex == index - 2 ? Colors.white : Colors.black54
+                        color: _selectedIndex == index - headerNum ? Colors.white : Colors.black54
                       ),
                       title: Text(
                         Controller.homeBottomTabTitle,
                         style: TextStyle(
-                          color: _selectedIndex == index - 2 ? Colors.white : Colors.black87
+                          color: _selectedIndex == index - headerNum ? Colors.white : Colors.black87
                         ),
                       ),
                       onTap: () {
                         setState(() {
-                          _selectedIndex = index - 2;
+                          _selectedIndex = index - headerNum;
                           Navigator.pop(context);
                         });
                       },
@@ -208,24 +272,24 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
                 }
 
                 //  Leaderboard Tile
-                if (index == 3) {
+                if (index == headerNum + 1) {
                   return Card(
                     elevation: 0,
-                    color: _selectedIndex == index - 2 ? Controller.primaryColor.withAlpha(200) : Colors.transparent,
+                    color: _selectedIndex == index - headerNum ? Controller.primaryColor.withAlpha(200) : Colors.transparent,
                     child: ListTile(
                       leading: Icon(
                           Controller.leaderboardBottomTabIcon.icon,
-                          color: _selectedIndex == index - 2 ? Colors.white : Colors.black54
+                          color: _selectedIndex == index - headerNum ? Colors.white : Colors.black54
                       ),
                       title: Text(
                         Controller.leaderboardBottomTabTitle,
                         style: TextStyle(
-                            color: _selectedIndex == index - 2 ? Colors.white : Colors.black87
+                            color: _selectedIndex == index - headerNum ? Colors.white : Colors.black87
                         ),
                       ),
                       onTap: () {
                         setState(() {
-                          _selectedIndex = index - 2;
+                          _selectedIndex = index - headerNum;
                           Navigator.pop(context);
                         });
                       },
@@ -234,37 +298,38 @@ class _AssassinHomePageState extends State<AssassinHomePage> {
                 }
 
                 //  Feed Tile
-                if (index == 4) {
+                if (index == headerNum + 2) {
                   return Card(
                     elevation: 0,
-                    color: _selectedIndex == index - 2 ? Controller.primaryColor.withAlpha(200) : Colors.transparent,
+                    color: _selectedIndex == index - headerNum ? Controller.primaryColor.withAlpha(200) : Colors.transparent,
                     child: ListTile(
                       leading: Icon(
                           Controller.feedBottomTabIcon.icon,
-                          color: _selectedIndex == index - 2 ? Colors.white : Colors.black54
+                          color: _selectedIndex == index - headerNum ? Colors.white : Colors.black54
                       ),
                       title: Text(
                         Controller.feedBottomTabTitle,
                         style: TextStyle(
-                            color: _selectedIndex == index - 2 ? Colors.white : Colors.black87
+                            color: _selectedIndex == index - headerNum ? Colors.white : Colors.black87
                         ),
                       ),
                       onTap: () {
                         setState(() {
-                          _selectedIndex = index - 2;
+                          _selectedIndex = index - headerNum;
                           Navigator.pop(context);
                         });
                       },
                     ),
                   );
                 }
+
                 //  Create divider between screens and settings/about
-                if (index == 5){
+                if (index == headerNum + 3){
                   return const Divider();
                 }
 
                 //  Create settings tile
-                if (index == 6) {
+                if (index == headerNum + 4) {
                   return ListTile(
                     leading: Controller.settingsBottomTabIcon,
                     title: Text(Controller.settingsBottomTabTitle),
