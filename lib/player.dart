@@ -2,8 +2,8 @@
 //import 'dart:collection';
 import 'dart:math';
 
-// Player class for logic testing
-
+///This class represents the local user and stores their data, pushing to and
+///pulling from the remote DB as needed.
 class Player {
   static final Set<String> _questions = {"What is your favorite color?",
                                         "How many pets do you have?",
