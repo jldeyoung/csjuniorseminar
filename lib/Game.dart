@@ -44,7 +44,7 @@ class Game {
     gameOver = false;// update database to show game in progress
     setTargets();
     //get local player info from database
-    Player localPlayer = new Player(/*localplayerinfo*/); //localPlayer should be a global variable, pending further implementation.
+    //Player localPlayer = new Player(/*localplayerinfo*/); //localPlayer should be a global variable, pending further implementation.
   }
 
   ///This method retrieves the most up-to-date leaderboard information from the
